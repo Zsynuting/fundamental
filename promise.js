@@ -45,10 +45,10 @@ class MyPromise {
   then(onResolve, onReject) {
     return new MyPromise((resolve, reject) => {
       if (this.status === FULFILLED) {
-        onResolve(this.value);
+        resolve(onResolve(this.value));
         return;
       } else if (this.status === REJECTED) {
-        onReject(this.reason);
+        reject(onReject(this.reason));
         return;
       } else {
         this.fulfilledCallbackList.push(() =>
