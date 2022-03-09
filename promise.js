@@ -3,9 +3,7 @@ const PENDING = 'pending';
 const REJECTED = 'rejected';
 
 const resolveValue = function (value, resolve, reject) {
-  if (value instanceof Error) {
-    reject(value);
-  } else if (value instanceof MyPromise) {
+  if (value instanceof MyPromise) {
     value.then(resolve, reject);
   } else {
     resolve(value);
@@ -22,7 +20,11 @@ class MyPromise {
   constructor(executor) {
     this.resolveHandler = this.resolveHandler.bind(this);
     this.rejectHandler = this.rejectHandler.bind(this);
-    executor(this.resolveHandler, this.rejectHandler);
+    try {
+      executor(this.resolveHandler, this.rejectHandler);
+    } catch (ex) {
+      this.rejectHandler(ex);
+    }
   }
 
   resolveHandler(res) {
@@ -45,10 +47,14 @@ class MyPromise {
   then(onResolve, onReject) {
     return new MyPromise((resolve, reject) => {
       if (this.status === FULFILLED) {
-        resolve(onResolve(this.value));
+        queueMicrotask(() => {
+          resolve(onResolve(this.value));
+        });
         return;
       } else if (this.status === REJECTED) {
-        reject(onReject(this.reason));
+        queueMicrotask(() => {
+          reject(onReject(this.reason));
+        });
         return;
       } else {
         this.fulfilledCallbackList.push(() =>

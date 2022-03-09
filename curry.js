@@ -1,5 +1,4 @@
 const curry = (fn, arity = fn.length, ...args) => {
-  console.log('%c 🍵 args: ', 'font-size:20px;background-color: #B03734;color:#fff;', args);
   return arity <= args.length ? fn(...args) : curry.bind(null, fn, arity, ...args);
 }
   

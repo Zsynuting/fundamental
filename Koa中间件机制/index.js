@@ -4,7 +4,12 @@ const middleware = [
     await next();
   },
   async (ctx, next) => {
-    console.log(2);
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+        console.log(2);
+      }, 1000);
+    });
     await next();
   },
   async (ctx, next) => {

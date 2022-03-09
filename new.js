@@ -22,6 +22,7 @@ const f = new F(1)
 console.log(f) // {x:1}
 console.log(f.x) // 1
 
+// 当构造函数返回值为function时，this失效，以function为实例
 function F(x) {
   this.x = x;
 
@@ -37,7 +38,7 @@ function objectFactory() {
   const obj = new Object();
   obj.__proto__ = Ctor.prototype;
   const res = Ctor.apply(obj, arguments);
-  return ['object', 'function'].indexOf(typeof res) > -1 ? ret : obj;
+  return ['object', 'function'].indexOf(typeof res) > -1 ? res : obj;
 }
 
 function F(x) {
