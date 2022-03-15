@@ -1,6 +1,5 @@
 function sum() {
-  let args = [];
-  args = args.concat(...arguments);
+  let args = [...arguments];
   function currySum() {
     args = args.concat(...arguments);
     return currySum;
